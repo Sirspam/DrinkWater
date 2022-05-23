@@ -112,13 +112,36 @@ namespace DrinkWater.UI.ViewControllers
         [UIAction("format-wait-duration-slider")]
         private string FormatWaitDurationSlider(int value)
         {
-	        return value + " seconds";
+	        if (value == 0)
+	        {
+		        return "Instant";
+	        }
+	        else
+	        {
+		        return value + " seconds";   
+	        }
         }
         
         [UIAction("format-playtime-slider")]
         private string FormatPlaytimeSlider(int value)
         {
+	        if (value == 0)
+	        {
+		        return "After every level";
+	        }
+
 	        return value + " minutes";
+        }
+        
+        [UIAction("format-playcount-slider")]
+        private string FormatPlayCountSlider(int value)
+        {
+	        if (value == 0)
+	        {
+		        return "After every level";
+	        }
+
+	        return value.ToString();
         }
         
         [UIAction("#post-parse")]
