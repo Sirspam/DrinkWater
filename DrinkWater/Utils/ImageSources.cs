@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using IPA.Utilities;
 using Newtonsoft.Json;
 using SiraUtil.Logging;
+using SiraUtil.Web;
 using Random = UnityEngine.Random;
 
 namespace DrinkWater.Utils
@@ -16,66 +17,76 @@ namespace DrinkWater.Utils
 		private List<string>? _localFiles;
 		private const string WaifuPicsEndpoint = "https://api.waifu.pics/sfw/neko";
 		private readonly string _drinkWaterPath = Path.Combine(UnityGame.UserDataPath, nameof(DrinkWater));
-		private readonly string[] _classicSources = { "https://media1.tenor.com/images/013d560bab2b0fc56a2bc43b8262b4ed/tenor.gif", "https://i.giphy.com/zWOnltJgKVlsc.gif", "https://i.giphy.com/3ohhwF34cGDoFFhRfy.gif", "https://i.giphy.com/eRBa4tzlbNwE8.gif" };
 
 		private readonly SiraLog _siraLog;
+		private readonly IHttpService _httpService;
 		
 		public enum Sources
 		{
 			Classic,
 			Nya,
+			CatBoys,
 			Local
 		}
 
-		public ImageSources(SiraLog siraLog)
+		public ImageSources(SiraLog siraLog, IHttpService httpService)
 		{
 			_siraLog = siraLog;
+			_httpService = httpService;
 		}
 
 		public async Task<string> GetImagePath(Sources source)
 		{
-			switch (source)
+			return source switch
 			{
-				case Sources.Classic:
-					return GetClassic();
-				case Sources.Nya:
-					return await Task.Run(GetNya);
-				case Sources.Local:
-					return GetLocal();
-				default:
-					return GetClassic();;
-			}
+				Sources.Classic => GetClassicImageUrl(),
+				Sources.Nya => await Task.Run(() => GetApiImageUrl("https://api.waifu.pics/sfw/neko")),
+				Sources.CatBoys => await Task.Run(() => GetApiImageUrl("https://api.catboys.com/img")),
+				Sources.Local => GetLocalImagePath(),
+				_ => GetClassicImageUrl()
+			};
 		}
 
-		private string GetClassic()
+		private string GetClassicImageUrl()
 		{
-			return _classicSources[Random.Range(0, _classicSources.Length)];
+			var classicSources = new[]
+			{
+				"https://media1.tenor.com/images/013d560bab2b0fc56a2bc43b8262b4ed/tenor.gif",
+				"https://i.giphy.com/zWOnltJgKVlsc.gif", 
+				"https://i.giphy.com/3ohhwF34cGDoFFhRfy.gif",
+				"https://i.giphy.com/eRBa4tzlbNwE8.gif"
+			};
+			return classicSources[Random.Range(0, classicSources.Length)];
 		}
 
-		private async Task<string> GetNya()
+		private async Task<string> GetApiImageUrl(string apiUrl)
 		{
 			try
 			{
-				_siraLog.Info("Attempting to get image url from Waifu.Pics");
-				using var client = new HttpClient();
-				var response = await client.GetAsync(WaifuPicsEndpoint);
-				var result = JsonConvert.DeserializeObject<WebAPIEntries>(Encoding.UTF8.GetString(await response.Content.ReadAsByteArrayAsync()));
+				_siraLog.Info($@"Attempting to get image url from {apiUrl}");
+				var response = await _httpService.GetAsync(apiUrl);
+				if (!response.Successful)
+				{
+					throw new HttpRequestException();
+				}
+				
+				var result = JsonConvert.DeserializeObject<WebAPIEntries>(Encoding.UTF8.GetString(await response.ReadAsByteArrayAsync()));
 				if (result?.Url != null)
 				{
 					_siraLog.Info("Loading image from " + result.Url);
 					return result.Url;
 				}
 				_siraLog.Info("url is null. Loading Classic image instead");
-				return GetClassic();
+				return GetClassicImageUrl();
 			}
 			catch (Exception exception)
 			{
-				_siraLog.Error("Failed to get url " + exception);
-				return GetClassic();
+				_siraLog.Error("Failed to get image url " + exception);
+				return GetClassicImageUrl();
 			}
 		}
 
-		private string GetLocal()
+		private string GetLocalImagePath()
 		{
 			if (_localFiles == null)
 			{
