@@ -10,7 +10,7 @@ using IPA.Utilities;
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
 namespace DrinkWater.Configuration
 {
-    public class PluginConfig
+    internal class PluginConfig
     {
         public virtual bool EnablePlugin { get; set; } = true;
         public virtual bool ShowImages { get; set; } = true;

@@ -8,7 +8,7 @@ using Zenject;
 
 namespace DrinkWater.Installers
 {
-	internal class DrinkWaterMenuInstaller : Installer
+	internal sealed class DrinkWaterMenuInstaller : Installer
 	{
 		private readonly PluginConfig _pluginConfig;
 

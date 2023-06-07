@@ -16,7 +16,7 @@ using Zenject;
 
 namespace DrinkWater.UI.ViewControllers
 {
-	public class DrinkWaterSettingsViewController : IInitializable, IDisposable, INotifyPropertyChanged
+	internal sealed class DrinkWaterSettingsViewController : IInitializable, IDisposable, INotifyPropertyChanged
 	{
 		private bool _updateAvailable;
 		
@@ -116,10 +116,8 @@ namespace DrinkWater.UI.ViewControllers
 	        {
 		        return "Instant";
 	        }
-	        else
-	        {
-		        return value + " seconds";   
-	        }
+
+	        return value + " seconds";
         }
         
         [UIAction("format-playtime-slider")]

@@ -12,11 +12,9 @@ using Random = UnityEngine.Random;
 
 namespace DrinkWater.Utils
 {
-	public class ImageSources
+	internal sealed class ImageSources
 	{
 		private List<string>? _localFiles;
-		private const string WaifuPicsEndpoint = "https://api.waifu.pics/sfw/neko";
-		private readonly string _drinkWaterPath = Path.Combine(UnityGame.UserDataPath, nameof(DrinkWater));
 
 		private readonly SiraLog _siraLog;
 		private readonly IHttpService _httpService;
@@ -90,7 +88,7 @@ namespace DrinkWater.Utils
 		{
 			if (_localFiles == null)
 			{
-				var files = Directory.GetFiles(_drinkWaterPath);
+				var files = Directory.GetFiles(Path.Combine(UnityGame.UserDataPath, nameof(DrinkWater)));
 				_localFiles = new List<string>();
 				foreach (var file in files)
 				{

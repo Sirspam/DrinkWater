@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
@@ -6,17 +7,17 @@ using DrinkWater.Configuration;
 using DrinkWater.UI.FlowCoordinators;
 using DrinkWater.Utils;
 using HMUI;
-using SiraUtil.Logging;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Random = UnityEngine.Random;
 
 namespace DrinkWater.UI.ViewControllers
 {
     [ViewDefinition("DrinkWater.UI.Views.DrinkWaterPanelView.bsml")]
     [HotReload(RelativePathToLayout = @"..\Views\DrinkWaterPanelView")]
-    internal class DrinkWaterPanelController : BSMLAutomaticViewController
+    internal sealed class DrinkWaterPanelController : BSMLAutomaticViewController
     {
         public bool displayPanelNeeded;
         private PanelMode _panelMode;
@@ -29,8 +30,7 @@ namespace DrinkWater.UI.ViewControllers
             Height = 512,
             Width = 512
         };
-
-        private SiraLog _siraLog = null!;
+        
         private PluginConfig _pluginConfig = null!;
         private ImageSources _imageSources = null!;
         private MainFlowCoordinator _mainFlowCoordinator = null!;
@@ -44,9 +44,8 @@ namespace DrinkWater.UI.ViewControllers
         }
         
         [Inject]
-        public void Construct(SiraLog siraLog, PluginConfig pluginConfig, ImageSources imageSources, MainFlowCoordinator mainFlowCoordinator, ResultsViewController resultsViewController, DrinkWaterFlowCoordinator drinkWaterFlowCoordinator)
+        public void Construct(PluginConfig pluginConfig, ImageSources imageSources, MainFlowCoordinator mainFlowCoordinator, ResultsViewController resultsViewController, DrinkWaterFlowCoordinator drinkWaterFlowCoordinator)
         {
-            _siraLog = siraLog;
             _pluginConfig = pluginConfig;
             _imageSources = imageSources;
             _mainFlowCoordinator = mainFlowCoordinator;
@@ -54,20 +53,20 @@ namespace DrinkWater.UI.ViewControllers
             _drinkWaterFlowCoordinator = drinkWaterFlowCoordinator;
         }
 
-        [UIComponent("header-content")] 
-        internal readonly TextMeshProUGUI HeaderContent = null!;
+        [UIComponent("header-content")]
+        private readonly TextMeshProUGUI _headerContent = null!;
         
-        [UIComponent("text-content")] 
-        internal readonly TextMeshProUGUI TextContent = null!;
+        [UIComponent("text-content")]
+        private readonly TextMeshProUGUI _textContent = null!;
 
-        [UIComponent("drink-image")] 
-        internal readonly ImageView DrinkImage = null!;
+        [UIComponent("drink-image")]
+        private readonly ImageView _drinkImage = null!;
 
-        [UIComponent("continue-button")] 
-        internal readonly Button ContinueButton = null!;
+        [UIComponent("continue-button")]
+        private readonly Button _continueButton = null!;
         
         [UIComponent("continue-button")]
-        internal readonly TextMeshProUGUI ContinueButtonText = null!;
+        private readonly TextMeshProUGUI _continueButtonText = null!;
         
         public void ShowDrinkWaterPanel(PanelMode mode)
         {
@@ -79,7 +78,7 @@ namespace DrinkWater.UI.ViewControllers
 
         private IEnumerator MakeButtonInteractableDelay(Button button, float duration, float delayStep = 1f, string format = "0", bool showInButton = true)
         {
-            var buttonTextContent = ContinueButtonText.text;
+            var buttonTextContent = _continueButtonText.text;
             if (showInButton)
                 button.SetButtonText(buttonTextContent + (duration > 0 ? " (" + duration.ToString(format) + ")" : ""));
             button.interactable = false;
@@ -94,28 +93,28 @@ namespace DrinkWater.UI.ViewControllers
             button.interactable = true;
         }
 
-        protected async override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+        protected override async void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
 
             if ((_pluginConfig.ImageSource == ImageSources.Sources.Nya || _pluginConfig.ImageSource == ImageSources.Sources.CatBoys) && Random.Range(0, 4) == 3)
             {
-                HeaderContent.text = "Dwynk sum watew! 💦";
-                TextContent.text = (_panelMode == PanelMode.Restart ? "Beyfow weestawting this song" : "Beyfow bwowsying sum noow songes") + ", dwynk sum watew! t-t-that ish iympowtant fow yow bodee!! (>ω< )";
-                ContinueButtonText.text = "I undewstwand!! x3";
+                _headerContent.text = "Dwynk sum watew! 💦";
+                _textContent.text = (_panelMode == PanelMode.Restart ? "Beyfow weestawting this song" : "Beyfow bwowsying sum noow songes") + ", dwynk sum watew! i-i-it ish iympowtant fow yow bodee!! (>ω< )";
+                _continueButtonText.text = "I undewstwand!! x3";
             }
             else
             {
-                HeaderContent.text = "Drink some water! 💦";
-                TextContent.text = (_panelMode == PanelMode.Restart ? "Before restarting this song" : "Before browsing some new songs") + ", drink some water, that's important for your body!";
-                ContinueButtonText.text = "I understand!";
+                _headerContent.text = "Drink some water! 💦";
+                _textContent.text = (_panelMode == PanelMode.Restart ? "Before restarting this song" : "Before browsing some new songs") + ", drink some water, it's important for your body!";
+                _continueButtonText.text = "I understand!";
             }
             
-            StartCoroutine(MakeButtonInteractableDelay(ContinueButton, _pluginConfig.WaitDuration, 0.1f, "0.0"));
+            StartCoroutine(MakeButtonInteractableDelay(_continueButton, _pluginConfig.WaitDuration, 0.1f, "0.0"));
 
             if (_pluginConfig.ShowImages)
             {
-                DrinkImage.SetImage(await _imageSources.GetImagePath(_pluginConfig.ImageSource), true, ScaleOptions);
+                _drinkImage.SetImage(await _imageSources.GetImagePath(_pluginConfig.ImageSource), true, ScaleOptions);
             }
         }
 
@@ -124,7 +123,7 @@ namespace DrinkWater.UI.ViewControllers
         {
             //TODO: Improve transitions
             _previousFlowCoordinator.DismissFlowCoordinator(_mainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf(), immediately: true);
-            DrinkImage.sprite = Utilities.ImageResources.BlankSprite;
+            _drinkImage.sprite = Utilities.ImageResources.BlankSprite;
             
             switch (_panelMode)
             {
@@ -134,6 +133,8 @@ namespace DrinkWater.UI.ViewControllers
                 case PanelMode.Restart:
                     _resultsViewController.RestartButtonPressed();
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

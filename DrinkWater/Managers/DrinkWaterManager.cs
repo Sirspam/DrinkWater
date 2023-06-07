@@ -7,7 +7,7 @@ using Zenject;
 
 namespace DrinkWater.Managers
 {
-	internal class DrinkWaterManager : IInitializable, IDisposable
+	internal sealed class DrinkWaterManager : IInitializable, IDisposable
 	{
 		private int _playCount;
 		private float _playTime;

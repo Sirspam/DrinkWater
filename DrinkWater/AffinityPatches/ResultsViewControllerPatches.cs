@@ -4,7 +4,7 @@ using SiraUtil.Affinity;
 
 namespace DrinkWater.AffinityPatches
 {
-	internal class ResultsViewControllerPatches : IAffinity
+	internal sealed class ResultsViewControllerPatches : IAffinity
 	{
 		private readonly PluginConfig _pluginConfig;
 		private readonly DrinkWaterPanelController _drinkWaterPanelController;
