@@ -26,7 +26,8 @@ namespace DrinkWater.UI.ViewControllers
         {
             ShouldScale = true,
             MaintainRatio = true,
-            Height = 512
+            Height = 512,
+            Width = 512
         };
 
         private SiraLog _siraLog = null!;

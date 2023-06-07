@@ -9,7 +9,7 @@
   "icon": "DrinkWater.Resources.AquaDrink.png",
     "dependsOn": {
       "BSIPA": "^4.3.0",
-      "BeatSaberMarkupLanguage": "^1.6.2",
+      "BeatSaberMarkupLanguage": "^1.7.0",
       "SiraUtil": "^3.0.5"
     },
   "links": {
