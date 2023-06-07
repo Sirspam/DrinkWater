@@ -19,7 +19,8 @@ namespace DrinkWater.AffinityPatches
 		[AffinityPatch(typeof(ResultsViewController), nameof(ResultsViewController.ContinueButtonPressed))]
 		private bool ContinueButtonPressedPatch()
 		{
-			if (!_pluginConfig.EnablePlugin || !_drinkWaterPanelController.displayPanelNeeded) return true;
+			if (!_pluginConfig.EnablePlugin || !_drinkWaterPanelController.displayPanelNeeded) 
+				return true;
 
 			_drinkWaterPanelController.ShowDrinkWaterPanel(DrinkWaterPanelController.PanelMode.Continue);
 			return false;
@@ -30,7 +31,8 @@ namespace DrinkWater.AffinityPatches
 		[AffinityPatch(typeof(ResultsViewController), nameof(ResultsViewController.RestartButtonPressed))]
 		private bool RestartButtonPressedPatch()
 		{
-			if (!_pluginConfig.EnablePlugin || !_drinkWaterPanelController.displayPanelNeeded) return true;
+			if (!_pluginConfig.EnablePlugin || !_drinkWaterPanelController.displayPanelNeeded) 
+				return true;
 
 			_drinkWaterPanelController.ShowDrinkWaterPanel(DrinkWaterPanelController.PanelMode.Restart);
 			return false;
