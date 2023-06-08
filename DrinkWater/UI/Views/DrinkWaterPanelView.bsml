@@ -7,7 +7,8 @@
       <text id='text-content' align='Center' word-wrapping="false"/>
     </horizontal>
     <horizontal horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
-      <img id='drink-image' preserve-aspect="true" pref-width='45' pref-height='45'/>
+        <loading-indicator id="loading-indicator" preserve-aspect="true" pref-height="45"/>
+        <img id='drink-image' preserve-aspect="true" pref-width='45' pref-height='45'/>
     </horizontal>
     <horizontal vertical-fit='PreferredSize'>
       <button id='continue-button' text='I understand!' on-click='continue-clicked'/>

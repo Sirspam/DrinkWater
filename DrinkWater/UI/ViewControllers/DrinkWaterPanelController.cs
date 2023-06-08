@@ -19,8 +19,8 @@ namespace DrinkWater.UI.ViewControllers
     [HotReload(RelativePathToLayout = @"..\Views\DrinkWaterPanelView")]
     internal sealed class DrinkWaterPanelController : BSMLAutomaticViewController
     {
-        public bool displayPanelNeeded;
         private PanelMode _panelMode;
+        public bool displayPanelNeeded;
         private FlowCoordinator? _previousFlowCoordinator;
 
         private static readonly BeatSaberUI.ScaleOptions ScaleOptions = new BeatSaberUI.ScaleOptions
@@ -52,7 +52,7 @@ namespace DrinkWater.UI.ViewControllers
             _resultsViewController = resultsViewController;
             _drinkWaterFlowCoordinator = drinkWaterFlowCoordinator;
         }
-
+        
         [UIComponent("header-content")]
         private readonly TextMeshProUGUI _headerContent = null!;
         
@@ -61,13 +61,16 @@ namespace DrinkWater.UI.ViewControllers
 
         [UIComponent("drink-image")]
         private readonly ImageView _drinkImage = null!;
+        
+        [UIObject("loading-indicator")]
+        private readonly GameObject _loadingIndicator = null!;
 
         [UIComponent("continue-button")]
         private readonly Button _continueButton = null!;
         
         [UIComponent("continue-button")]
         private readonly TextMeshProUGUI _continueButtonText = null!;
-        
+
         public void ShowDrinkWaterPanel(PanelMode mode)
         {
             _previousFlowCoordinator = _mainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf();
@@ -93,9 +96,25 @@ namespace DrinkWater.UI.ViewControllers
             button.interactable = true;
         }
 
+        private void SetImageLoading(bool value)
+        {
+            if (value)
+            {
+                _loadingIndicator.SetActive(true);
+                _drinkImage.gameObject.SetActive(false);
+            }
+            else
+            {
+                _loadingIndicator.SetActive(false);
+                _drinkImage.gameObject.SetActive(true);
+            }
+        }
         protected override async void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
+            
+            _loadingIndicator.SetActive(false);
+            _drinkImage.gameObject.SetActive(false);
 
             if ((_pluginConfig.ImageSource == ImageSources.Sources.Nya || _pluginConfig.ImageSource == ImageSources.Sources.CatBoys) && Random.Range(0, 4) == 3)
             {
@@ -114,7 +133,8 @@ namespace DrinkWater.UI.ViewControllers
 
             if (_pluginConfig.ShowImages)
             {
-                _drinkImage.SetImage(await _imageSources.GetImagePath(_pluginConfig.ImageSource), true, ScaleOptions);
+                SetImageLoading(true);
+                _drinkImage.SetImage(await _imageSources.GetImagePath(_pluginConfig.ImageSource), true, ScaleOptions, () => SetImageLoading(false));
             }
         }
 
