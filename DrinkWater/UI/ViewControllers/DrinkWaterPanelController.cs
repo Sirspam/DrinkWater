@@ -112,9 +112,6 @@ namespace DrinkWater.UI.ViewControllers
         protected override async void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
-            
-            _loadingIndicator.SetActive(false);
-            _drinkImage.gameObject.SetActive(false);
 
             if ((_pluginConfig.ImageSource == ImageSources.Sources.Nya || _pluginConfig.ImageSource == ImageSources.Sources.CatBoys) && Random.Range(0, 4) == 3)
             {
@@ -135,6 +132,11 @@ namespace DrinkWater.UI.ViewControllers
             {
                 SetImageLoading(true);
                 _drinkImage.SetImage(await _imageSources.GetImagePath(_pluginConfig.ImageSource), true, ScaleOptions, () => SetImageLoading(false));
+            }
+            else
+            {
+                _loadingIndicator.SetActive(false);
+                _drinkImage.gameObject.SetActive(false);
             }
         }
 
