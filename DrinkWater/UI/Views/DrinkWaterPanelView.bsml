@@ -1,17 +1,17 @@
 ﻿<bg xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd">
-  <vertical child-control-height='false'>
-    <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
-      <text id="header-content" text='Drink some water!' align='Center' font-size='8'/>
+  <vertical child-control-height="false">
+    <horizontal bg="panel-top" pad-left="10" pad-right="10" horizontal-fit="PreferredSize">
+      <text id="header-content" text="Drink some water!" align="Center" font-size="8"/>
     </horizontal>
-    <horizontal vertical-fit='PreferredSize'>
-      <text id='text-content' align='Center' word-wrapping="false"/>
+    <horizontal vertical-fit="PreferredSize">
+      <text id="text-content" align="Center" word-wrapping="false"/>
     </horizontal>
-    <horizontal horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
+    <horizontal horizontal-fit="PreferredSize" vertical-fit="PreferredSize">
         <loading-indicator id="loading-indicator" preserve-aspect="true" pref-height="45"/>
-        <img id='drink-image' preserve-aspect="true" pref-width='45' pref-height='45'/>
+        <img id="drink-image" preserve-aspect="true" pref-width="45" pref-height="45"/>
     </horizontal>
-    <horizontal vertical-fit='PreferredSize'>
-      <button id='continue-button' text='I understand!' on-click='continue-clicked'/>
+    <horizontal vertical-fit="PreferredSize">
+      <button id="continue-button" text="I understand!" on-click="continue-clicked"/>
     </horizontal>
   </vertical>
 </bg>
