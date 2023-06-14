@@ -54,8 +54,8 @@ namespace DrinkWater.UI.ViewControllers
 		[UIValue("enabled-bool")]
 		private bool EnabledValue
         {
-            get => _pluginConfig.EnablePlugin;
-            set => _pluginConfig.EnablePlugin = value;
+            get => _pluginConfig.Enabled;
+            set => _pluginConfig.Enabled = value;
         }
 
         [UIValue("show-image-bool")]
@@ -91,8 +91,8 @@ namespace DrinkWater.UI.ViewControllers
         [UIValue("enable-playtime-count-bool")]
         private bool EnableByPlaytimeCount
         {
-            get => _pluginConfig.EnableByPlaycount;
-            set => _pluginConfig.EnableByPlaycount = value;
+            get => _pluginConfig.EnableByPlayCount;
+            set => _pluginConfig.EnableByPlayCount = value;
         }
 
         [UIValue("playtime-warning-int")]
@@ -105,8 +105,8 @@ namespace DrinkWater.UI.ViewControllers
         [UIValue("playcount-warning-int")]
         private int PlaycountBeforeWarningValue
         {
-            get => _pluginConfig.PlaycountBeforeWarning;
-            set => _pluginConfig.PlaycountBeforeWarning = value;
+            get => _pluginConfig.PlayCountBeforeWarning;
+            set => _pluginConfig.PlayCountBeforeWarning = value;
         }
 
         [UIAction("format-wait-duration-slider")]
@@ -164,14 +164,14 @@ namespace DrinkWater.UI.ViewControllers
         [UIAction("#apply")]
         public void OnApply()
         {
-            _pluginConfig.EnablePlugin = EnabledValue;
+            _pluginConfig.Enabled = EnabledValue;
             _pluginConfig.ShowImages = ShowGifValue;
             _pluginConfig.ImageSource = (ImageSources.Sources) ImageSource;
             _pluginConfig.WaitDuration = WaitDurationValue;
             _pluginConfig.EnableByPlaytime = EnableByPlaytimeValue;
-            _pluginConfig.EnableByPlaycount = EnableByPlaytimeCount;
+            _pluginConfig.EnableByPlayCount = EnableByPlaytimeCount;
             _pluginConfig.PlaytimeBeforeWarning = PlaytimeBeforeWarningValue;
-            _pluginConfig.PlaycountBeforeWarning = PlaycountBeforeWarningValue;
+            _pluginConfig.PlayCountBeforeWarning = PlaycountBeforeWarningValue;
         }
 		
 		public void Initialize() => BSMLSettings.instance.AddSettingsMenu("Drink Water", $"{nameof(DrinkWater)}.UI.Views.SettingsView.bsml", this);
