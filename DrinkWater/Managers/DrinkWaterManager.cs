@@ -74,11 +74,10 @@ namespace DrinkWater.Managers
 			{
 				_gameScenesManager.transitionDidFinishEvent -= TransitionDidFinishEvent;
 				
-				if (results.levelEndAction == LevelCompletionResults.LevelEndAction.Quit && _drinkWaterPanelController.displayPanelNeeded) 
-					_drinkWaterPanelController.ShowDrinkWaterPanel(DrinkWaterPanelController.PanelMode.None);
+				_drinkWaterPanelController.ShowDrinkWaterPanel(DrinkWaterPanelController.PanelMode.None);
 			}
 
-			if (_pluginConfig.EnableByPlayCount && _drinkWaterPanelController.displayPanelNeeded)
+			if (results.levelEndAction == LevelCompletionResults.LevelEndAction.Quit && _drinkWaterPanelController.displayPanelNeeded)
 				_gameScenesManager.transitionDidFinishEvent += TransitionDidFinishEvent;
 		}
 
