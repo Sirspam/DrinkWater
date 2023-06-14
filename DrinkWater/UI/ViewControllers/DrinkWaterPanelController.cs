@@ -19,8 +19,9 @@ namespace DrinkWater.UI.ViewControllers
     [HotReload(RelativePathToLayout = @"..\Views\DrinkWaterPanelView")]
     internal sealed class DrinkWaterPanelController : BSMLAutomaticViewController
     {
-        private PanelMode _panelMode;
         public bool displayPanelNeeded;
+        
+        private PanelMode _panelMode;
         private FlowCoordinator? _previousFlowCoordinator;
 
         private static readonly BeatSaberUI.ScaleOptions ScaleOptions = new BeatSaberUI.ScaleOptions
@@ -40,7 +41,8 @@ namespace DrinkWater.UI.ViewControllers
         public enum PanelMode
         {
             Continue,
-            Restart
+            Restart,
+            None
         }
         
         [Inject]
@@ -143,8 +145,7 @@ namespace DrinkWater.UI.ViewControllers
         [UIAction("continue-clicked")]
         private void ContinueClicked()
         {
-            //TODO: Improve transitions
-            _previousFlowCoordinator.DismissFlowCoordinator(_mainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf(), immediately: true);
+            _previousFlowCoordinator.DismissFlowCoordinator(_mainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf(), immediately: _panelMode != PanelMode.None);
             _drinkImage.sprite = Utilities.ImageResources.BlankSprite;
             
             switch (_panelMode)
@@ -155,8 +156,9 @@ namespace DrinkWater.UI.ViewControllers
                 case PanelMode.Restart:
                     _resultsViewController.RestartButtonPressed();
                     break;
+                case PanelMode.None:
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    break;
             }
         }
     }

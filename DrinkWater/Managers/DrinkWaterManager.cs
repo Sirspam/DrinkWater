@@ -15,31 +15,34 @@ namespace DrinkWater.Managers
 		private readonly SiraLog _siraLog;
 		private readonly PluginConfig _pluginConfig;
 		private readonly ILevelFinisher _levelFinisher;
+		private readonly GameScenesManager _gameScenesManager;
 		private readonly DrinkWaterPanelController _drinkWaterPanelController;
 		private readonly StandardLevelScenesTransitionSetupDataSO _standardLevelScenesTransitionSetupData;
 
-		public DrinkWaterManager(SiraLog siraLog, PluginConfig pluginConfig, ILevelFinisher levelFinisher, DrinkWaterPanelController drinkWaterPanelController, StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupData)
+		public DrinkWaterManager(SiraLog siraLog, PluginConfig pluginConfig, ILevelFinisher levelFinisher, GameScenesManager gameScenesManager, DrinkWaterPanelController drinkWaterPanelController, StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupData)
 		{
 			_siraLog = siraLog;
 			_pluginConfig = pluginConfig;
 			_levelFinisher = levelFinisher;
+			_gameScenesManager = gameScenesManager;
 			_drinkWaterPanelController = drinkWaterPanelController;
 			_standardLevelScenesTransitionSetupData = standardLevelScenesTransitionSetupData;
 		}
 		
-		private void LevelFinisherOnStandardLevelFinished(LevelCompletionResults obj)
+		private void LevelFinisherOnStandardLevelFinished(LevelCompletionResults results)
 		{
-			if (!_pluginConfig.EnablePlugin) return;
+			if (!_pluginConfig.Enabled) 
+				return;
 
 			var practiceSettings = _standardLevelScenesTransitionSetupData.practiceSettings;
 
 			var songPlayDuration = practiceSettings == null
-				? obj.endSongTime
-				: obj.endSongTime - practiceSettings.startSongTime;
+				? results.endSongTime
+				: results.endSongTime - practiceSettings.startSongTime;
 
-			var songSpeedMul = practiceSettings?.songSpeedMul ?? obj.gameplayModifiers.songSpeedMul;
+			var songSpeedMul = practiceSettings?.songSpeedMul ?? results.gameplayModifiers.songSpeedMul;
 			
-			_siraLog.Info($"Song duration {songPlayDuration}, " +
+			_siraLog.Debug($"Song duration {songPlayDuration}, " +
 			              $"Speed Multiplier {songSpeedMul}, " +
 			              $"Actual playtime {songPlayDuration / songSpeedMul}");
 			
@@ -57,15 +60,26 @@ namespace DrinkWater.Managers
 				_playTime = 0f;
 				_playCount = 0;
 			}
-			else if (_pluginConfig.EnableByPlaycount && _playCount >= _pluginConfig.PlaycountBeforeWarning)
+			else if (_pluginConfig.EnableByPlayCount && _playCount >= _pluginConfig.PlayCountBeforeWarning)
 			{
-				_siraLog.Debug($"PlayCount: {_playCount}, Setting: {_pluginConfig.PlaycountBeforeWarning}");
+				_siraLog.Debug($"PlayCount: {_playCount}, Setting: {_pluginConfig.PlayCountBeforeWarning}");
 				_siraLog.Info("Required play count met");
 				_drinkWaterPanelController.displayPanelNeeded = true;
 				// same here
 				_playCount = 0;
 				_playTime = 0f;
 			}
+
+			void TransitionDidFinishEvent(ScenesTransitionSetupDataSO scenesTransitionSetupDataSo, DiContainer diContainer)
+			{
+				_gameScenesManager.transitionDidFinishEvent -= TransitionDidFinishEvent;
+				
+				if (results.levelEndAction == LevelCompletionResults.LevelEndAction.Quit && _drinkWaterPanelController.displayPanelNeeded) 
+					_drinkWaterPanelController.ShowDrinkWaterPanel(DrinkWaterPanelController.PanelMode.None);
+			}
+
+			if (_pluginConfig.EnableByPlayCount && _drinkWaterPanelController.displayPanelNeeded)
+				_gameScenesManager.transitionDidFinishEvent += TransitionDidFinishEvent;
 		}
 
 		public void Initialize()
