@@ -27,6 +27,34 @@ namespace DrinkWater.UI.ViewControllers
 			set => _pluginConfig.PlayCountBeforeWarning = value;
 		}
 		
+		[UIValue("play-count-level-finishes-bool")]
+		private bool CountLevelFinishes
+		{
+			get => _pluginConfig.CountLevelFinishes;
+			set => _pluginConfig.CountLevelFinishes = value;
+		}
+		
+		[UIValue("play-count-level-fails-bool")]
+		private bool CountLevelFails
+		{
+			get => _pluginConfig.CountLevelFails;
+			set => _pluginConfig.CountLevelFails = value;
+		}
+		
+		[UIValue("play-count-level-restarts-bool")]
+		private bool CountLevelRestarts
+		{
+			get => _pluginConfig.CountLevelRestarts;
+			set => _pluginConfig.CountLevelRestarts = value;
+		}
+		
+		[UIValue("play-count-level-quits-bool")]
+		private bool CountLevelQuits
+		{
+			get => _pluginConfig.CountLevelQuits;
+			set => _pluginConfig.CountLevelQuits = value;
+		}
+
 		private readonly PluginConfig _pluginConfig;
 
 		public PlayCountSettingsModalController(PluginConfig pluginConfig)
@@ -37,12 +65,7 @@ namespace DrinkWater.UI.ViewControllers
 		[UIAction("format-play-count-slider")]
 		private string FormatPlayCountSlider(int value)
 		{
-			if (value == 0)
-			{
-				return "After every level";
-			}
-
-			return value.ToString();
+			return value == 1 ? "After every level" : value.ToString();
 		}
 
 		private void Parse(Component parentTransform)

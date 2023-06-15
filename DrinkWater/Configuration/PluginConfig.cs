@@ -23,6 +23,10 @@ namespace DrinkWater.Configuration
         public virtual bool CountPauseTime { get; set; } = true;
         public virtual bool EnableByPlayCount { get; set; } = false;
         public virtual int PlayCountBeforeWarning { get; set; } = 2;
+        public virtual bool CountLevelFinishes { get; set; } = true;
+        public virtual bool CountLevelFails { get; set; } = true;
+        public virtual bool CountLevelRestarts { get; set; } = false;
+        public virtual bool CountLevelQuits { get; set; } = true;
         
         public virtual void OnReload()
         {

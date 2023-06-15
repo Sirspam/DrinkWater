@@ -55,8 +55,25 @@ namespace DrinkWater.Managers
 			{
 				_playTime += _drinkWaterValues._pauseTimeInSeconds;
 			}
+			_siraLog.Info(results.levelEndAction);
+			_siraLog.Info(results.levelEndStateType);
+			if (results.levelEndStateType == LevelCompletionResults.LevelEndStateType.Cleared && _pluginConfig.CountLevelFinishes)
+			{
+				_playCount += 1;
+			}
+			else if (results.levelEndStateType == LevelCompletionResults.LevelEndStateType.Failed && _pluginConfig.CountLevelFails)
+			{
+				_playCount += 1;
+			}
+			else if (results.levelEndAction == LevelCompletionResults.LevelEndAction.Quit && _pluginConfig.CountLevelQuits)
+			{
+				_playCount += 1;
+			}
+			else if (results.levelEndAction == LevelCompletionResults.LevelEndAction.Restart && _pluginConfig.CountLevelRestarts)
+			{
+				_playCount += 1;
+			}
 			
-			_playCount += 1;
 			// playtime we get from the game is in second, config playtime setting is in minute
 			if (_pluginConfig.EnableByPlaytime && _playTime >= _pluginConfig.PlaytimeBeforeWarning * 60)
 			{

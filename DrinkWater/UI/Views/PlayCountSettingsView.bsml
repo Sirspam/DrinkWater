@@ -1,8 +1,12 @@
 ﻿<bg xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd">
-    <modal id="modal" show-event="open-modal" hide-event="close-modal" size-delta-x="85" size-delta-y="25" anchor-pos-x="-1" move-to-center="false" click-off-closes="true">
+    <modal id="modal" show-event="open-modal" hide-event="close-modal" size-delta-x="85" size-delta-y="45" anchor-pos-x="-1" move-to-center="false" click-off-closes="true">
         <vertical pref-width="80" horizontal-fit="PreferredSize" vertical-fit="PreferredSize">
             <bool-setting text="Enable by play count" value="enable-play-count-bool" bind-value="true" apply-on-change="true" hover-hint="Show warning based off of play count"/>
-            <slider-setting text="Play count warning" value="play-count-warning-int" formatter="format-play-count-slider" min="0" max="5" increment="1" integer-only="true" show-buttons="true" bind-value="true" apply-on-change="true" hover-hint="How many levels must be played before being warned"/>
+            <slider-setting text="Play count warning" value="play-count-warning-int" formatter="format-play-count-slider" min="1" max="5" increment="1" integer-only="true" show-buttons="true" bind-value="true" apply-on-change="true" hover-hint="How many levels must be played before being warned"/>
+            <bool-setting text="Count level finishes" value="play-count-level-finishes-bool" bind-value="true" apply-on-change="true" hover-hint="Whether finishing a level counts towards the warning"/>
+            <bool-setting text="Count level fails" value="play-count-level-fails-bool" bind-value="true" apply-on-change="true" hover-hint="Whether failing a level counts towards the warning"/>
+            <bool-setting text="Count level restarts" value="play-count-level-restarts-bool" bind-value="true" apply-on-change="true" hover-hint="Whether restarting a level counts towards the warning"/>
+            <bool-setting text="Count level quits" value="play-count-level-quits-bool" bind-value="true" apply-on-change="true" hover-hint="Whether quitting a level counts towards the warning"/>
         </vertical>
     </modal>
 </bg>
