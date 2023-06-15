@@ -1,6 +1,7 @@
 ﻿using System;
 using DrinkWater.Configuration;
 using DrinkWater.UI.ViewControllers;
+using DrinkWater.Utils;
 using SiraUtil.Logging;
 using SiraUtil.Services;
 using Zenject;
@@ -15,15 +16,17 @@ namespace DrinkWater.Managers
 		private readonly SiraLog _siraLog;
 		private readonly PluginConfig _pluginConfig;
 		private readonly ILevelFinisher _levelFinisher;
+		private readonly DrinkWaterValues _drinkWaterValues;
 		private readonly GameScenesManager _gameScenesManager;
 		private readonly DrinkWaterPanelController _drinkWaterPanelController;
 		private readonly StandardLevelScenesTransitionSetupDataSO _standardLevelScenesTransitionSetupData;
 
-		public DrinkWaterManager(SiraLog siraLog, PluginConfig pluginConfig, ILevelFinisher levelFinisher, GameScenesManager gameScenesManager, DrinkWaterPanelController drinkWaterPanelController, StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupData)
+		public DrinkWaterManager(SiraLog siraLog, PluginConfig pluginConfig, ILevelFinisher levelFinisher, DrinkWaterValues drinkWaterValues, GameScenesManager gameScenesManager, DrinkWaterPanelController drinkWaterPanelController, StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupData)
 		{
 			_siraLog = siraLog;
 			_pluginConfig = pluginConfig;
 			_levelFinisher = levelFinisher;
+			_drinkWaterValues = drinkWaterValues;
 			_gameScenesManager = gameScenesManager;
 			_drinkWaterPanelController = drinkWaterPanelController;
 			_standardLevelScenesTransitionSetupData = standardLevelScenesTransitionSetupData;
@@ -44,9 +47,15 @@ namespace DrinkWater.Managers
 			
 			_siraLog.Debug($"Song duration {songPlayDuration}, " +
 			              $"Speed Multiplier {songSpeedMul}, " +
-			              $"Actual playtime {songPlayDuration / songSpeedMul}");
+			              $"Actual playtime {songPlayDuration / songSpeedMul}, " +
+			              $"Pause time {_drinkWaterValues._pauseTimeInSeconds}");
 			
 			_playTime += songPlayDuration / songSpeedMul;
+			if (_pluginConfig.CountPauseTime)
+			{
+				_playTime += _drinkWaterValues._pauseTimeInSeconds;
+			}
+			
 			_playCount += 1;
 			// playtime we get from the game is in second, config playtime setting is in minute
 			if (_pluginConfig.EnableByPlaytime && _playTime >= _pluginConfig.PlaytimeBeforeWarning * 60)

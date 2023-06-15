@@ -19,7 +19,9 @@ namespace DrinkWater
             zenjector.UseLogger(logger);
             zenjector.UseMetadataBinder<Plugin>();
 
+            zenjector.Install<DrinkWaterAppInstaller>(Location.App);
             zenjector.Install<DrinkWaterMenuInstaller>(Location.Menu, conf.Generated<PluginConfig>());
+            zenjector.Install<DrinkWaterGameInstaller>(Location.Singleplayer);
         }
     }
 }
