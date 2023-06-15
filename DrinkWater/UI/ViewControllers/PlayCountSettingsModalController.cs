@@ -69,10 +69,7 @@ namespace DrinkWater.UI.ViewControllers
 		}
 		
 		[UIAction("format-play-count-slider")]
-		private string FormatPlayCountSlider(int value)
-		{
-			return value == 1 ? "After every level" : value.ToString();
-		}
+		private string FormatPlayCountSlider(int value) => value == 1 ? "After every level" : $"{value.ToString()} levels";
 
 		private void Parse(Component parentTransform, DrinkWaterSettingsViewController.SetSettingsButtonUnderline setSettingsButtonUnderlineDelegate)
 		{
