@@ -9,8 +9,8 @@
     <dropdown-list-setting text="Image Sources" value="image-source" choices="image-sources-list" bind-value="true" apply-on-change="true" hover-hint="Where the image is sourced from"/>
     <slider-setting text="Wait duration" value="wait-duration-int" formatter="format-wait-duration-slider" min="0" max="30" increment="1" integer-only="true" show-buttons="true" bind-value="true" apply-on-change="true" hover-hint="Amount of seconds until the warning screen can be dismissed"/>
     <horizontal>
-      <button text="Playtime Settings" on-click="playtime-settings-clicked" pref-width="40" pref-height="8"/>
-      <button text="Play Count Settings" on-click="play-count-settings-clicked" pref-width="40" pref-height="8"/>
+      <button id="playtime-settings-button" text="Playtime Settings" on-click="playtime-settings-clicked" pref-width="40" pref-height="8"/>
+      <button id="play-count-settings-button" text="Play Count Settings" on-click="play-count-settings-clicked" pref-width="40" pref-height="8"/>
     </horizontal>
   </settings-container>
 </bg>

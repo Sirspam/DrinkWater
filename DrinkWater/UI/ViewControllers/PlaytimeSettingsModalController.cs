@@ -10,6 +10,7 @@ namespace DrinkWater.UI.ViewControllers
 	internal sealed class PlaytimeSettingsModalController
 	{
 		private bool _parsed;
+		private DrinkWaterSettingsViewController.SetSettingsButtonUnderline _setSettingsButtonUnderlineDelegate = null!;
 		
 		[UIParams] private readonly BSMLParserParams _parserParams = null!;
 		
@@ -17,9 +18,13 @@ namespace DrinkWater.UI.ViewControllers
 		private bool EnableByPlaytimeValue
 		{
 			get => _pluginConfig.EnableByPlaytime;
-			set => _pluginConfig.EnableByPlaytime = value;
+			set
+			{
+				_pluginConfig.EnableByPlaytime = value;
+				_setSettingsButtonUnderlineDelegate(value);
+			}
 		}
-		
+
 		[UIValue("playtime-warning-int")]
 		private int PlaytimeBeforeWarningValue
 		{
@@ -52,18 +57,19 @@ namespace DrinkWater.UI.ViewControllers
 			return value + " minutes";
 		}
 
-		private void Parse(Component parentTransform)
+		private void Parse(Component parentTransform, DrinkWaterSettingsViewController.SetSettingsButtonUnderline setSettingsButtonUnderlineDelegate)
 		{
 			if (!_parsed)
 			{
 				BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "DrinkWater.UI.Views.PlaytimeSettingsView.bsml"), parentTransform.gameObject, this);
+				_setSettingsButtonUnderlineDelegate = setSettingsButtonUnderlineDelegate;
 				_parsed = true;
 			}
 		}
 
-		public void ShowModal(Transform parentTransform)
+		public void ShowModal(Transform parentTransform,  DrinkWaterSettingsViewController.SetSettingsButtonUnderline setSettingsButtonUnderlineDelegate)
 		{
-			Parse(parentTransform);
+			Parse(parentTransform, setSettingsButtonUnderlineDelegate);
 			
 			_parserParams.EmitEvent("close-modal");
 			_parserParams.EmitEvent("open-modal");

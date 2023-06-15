@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Parser;
@@ -10,6 +11,7 @@ namespace DrinkWater.UI.ViewControllers
 	internal sealed class PlayCountSettingsModalController
 	{
 		private bool _parsed;
+		private DrinkWaterSettingsViewController.SetSettingsButtonUnderline _setSettingsButtonUnderlineDelegate = null!;
 		
 		[UIParams] private readonly BSMLParserParams _parserParams = null!;
 		
@@ -17,7 +19,11 @@ namespace DrinkWater.UI.ViewControllers
 		private bool EnableByPlaytimeCount
 		{
 			get => _pluginConfig.EnableByPlayCount;
-			set => _pluginConfig.EnableByPlayCount = value;
+			set
+			{
+				_pluginConfig.EnableByPlayCount = value;
+				_setSettingsButtonUnderlineDelegate(value);
+			}
 		}
 
 		[UIValue("play-count-warning-int")]
@@ -68,18 +74,19 @@ namespace DrinkWater.UI.ViewControllers
 			return value == 1 ? "After every level" : value.ToString();
 		}
 
-		private void Parse(Component parentTransform)
+		private void Parse(Component parentTransform, DrinkWaterSettingsViewController.SetSettingsButtonUnderline setSettingsButtonUnderlineDelegate)
 		{
 			if (!_parsed)
 			{
 				BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "DrinkWater.UI.Views.PlayCountSettingsView.bsml"), parentTransform.gameObject, this);
+				_setSettingsButtonUnderlineDelegate = setSettingsButtonUnderlineDelegate;
 				_parsed = true;
 			}
 		}
 
-		public void ShowModal(Transform parentTransform)
+		public void ShowModal(Transform parentTransform,  DrinkWaterSettingsViewController.SetSettingsButtonUnderline setSettingsButtonUnderlineDelegate)
 		{
-			Parse(parentTransform);
+			Parse(parentTransform, setSettingsButtonUnderlineDelegate);
 			
 			_parserParams.EmitEvent("close-modal");
 			_parserParams.EmitEvent("open-modal");

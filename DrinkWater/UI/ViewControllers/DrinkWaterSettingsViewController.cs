@@ -6,6 +6,7 @@ using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Settings;
 using DrinkWater.Configuration;
 using DrinkWater.Utils;
+using HMUI;
 using IPA.Loader;
 using SiraUtil.Logging;
 using SiraUtil.Web.SiraSync;
@@ -20,6 +21,8 @@ namespace DrinkWater.UI.ViewControllers
 {
 	internal sealed class DrinkWaterSettingsViewController : IInitializable, IDisposable, INotifyPropertyChanged
 	{
+		internal delegate void SetSettingsButtonUnderline(bool active);
+		
 		private bool _updateAvailable;
 
 		[UIComponent("update-text")] 
@@ -27,6 +30,12 @@ namespace DrinkWater.UI.ViewControllers
 
 		[UIComponent("settings-container")]
 		private readonly Transform _settingsContainerTransform = null!;
+		
+		[UIComponent("playtime-settings-button")]
+		private readonly Button _playtimeSettingsButton = null!;
+		
+		[UIComponent("play-count-settings-button")]
+		private readonly Button _playCountSettingsButton = null!;
 
 		private readonly SiraLog _siraLog;
 		private readonly PluginConfig _pluginConfig;
@@ -104,18 +113,21 @@ namespace DrinkWater.UI.ViewControllers
         [UIAction("playtime-settings-clicked")]
         private void PlaytimeSettingsClicked()
         {
-	        _playtimeSettingsModalController.ShowModal(_settingsContainerTransform);
+	        _playtimeSettingsModalController.ShowModal(_settingsContainerTransform, SetPlaytimeSettingsButtonUnderline);
         }
         
         [UIAction("play-count-settings-clicked")]
         private void PlayCountSettingsClicked()
 		{
-	        _playCountSettingsModalController.ShowModal(_settingsContainerTransform);
+	        _playCountSettingsModalController.ShowModal(_settingsContainerTransform, SetPlayCountSettingsButtonUnderline);
 		}
         
         [UIAction("#post-parse")]
         private async void PostParse()
         {
+	        SetPlayCountSettingsButtonUnderline(_pluginConfig.EnableByPlayCount);
+	        SetPlaytimeSettingsButtonUnderline(_pluginConfig.EnableByPlaytime);
+	        
 	        UpdateAvailable = false;
 	        
 	        if (!_updateAvailable)
@@ -130,6 +142,18 @@ namespace DrinkWater.UI.ViewControllers
 			        _timeTweeningManager.AddTween(new FloatTween(0f, 1f, val => _updateText.alpha = val, 0.4f, EaseType.InCubic), _updateText);
 		        }
 	        }
+        }
+
+        private void SetPlaytimeSettingsButtonUnderline(bool active)
+        {
+	        _playtimeSettingsButton.transform.Find("Underline").gameObject.GetComponent<ImageView>().color =
+		        active ? new Color(0f, 0.7529412f, 1f, 1f) : new Color(1f, 1f, 1f, 0.5019608f);
+        }
+        
+        private void SetPlayCountSettingsButtonUnderline(bool active)
+        {
+	        _playCountSettingsButton.transform.Find("Underline").gameObject.GetComponent<ImageView>().color =
+		        active ? new Color(0f, 0.7529412f, 1f, 1f) : new Color(1f, 1f, 1f, 0.5019608f);
         }
         
 		public void Initialize() => BSMLSettings.instance.AddSettingsMenu("Drink Water", $"{nameof(DrinkWater)}.UI.Views.SettingsView.bsml", this);
