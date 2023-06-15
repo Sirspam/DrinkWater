@@ -113,8 +113,4 @@
 		</PackageReference>
 		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Installers\" />
-	</ItemGroup>
 </Project>
