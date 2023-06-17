@@ -5,11 +5,11 @@
   "author": "Sirspam",
   "version": "1.1.0",
   "description": "A Beat Saber mod to remind you of the importance of hydration",
-  "gameVersion": "1.30.0",
+  "gameVersion": "1.29.1",
   "icon": "DrinkWater.Resources.AquaDrink.png",
   "dependsOn": {
-    "BSIPA": "^4.3.0",
-    "BeatSaberMarkupLanguage": "^1.7.0",
+    "BSIPA": "^4.2.0",
+    "BeatSaberMarkupLanguage": "^1.6.0",
     "SiraUtil": "^3.0.5"
   },
   "links": {
