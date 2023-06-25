@@ -4,7 +4,7 @@ using SiraUtil.Affinity;
 
 namespace DrinkWater.AffinityPatches
 {
-	internal class ResultsViewControllerPatches : IAffinity
+	internal sealed class ResultsViewControllerPatches : IAffinity
 	{
 		private readonly PluginConfig _pluginConfig;
 		private readonly DrinkWaterPanelController _drinkWaterPanelController;
@@ -19,7 +19,8 @@ namespace DrinkWater.AffinityPatches
 		[AffinityPatch(typeof(ResultsViewController), nameof(ResultsViewController.ContinueButtonPressed))]
 		private bool ContinueButtonPressedPatch()
 		{
-			if (!_pluginConfig.EnablePlugin || !_drinkWaterPanelController.displayPanelNeeded) return true;
+			if (!_pluginConfig.Enabled || !_drinkWaterPanelController.displayPanelNeeded) 
+				return true;
 
 			_drinkWaterPanelController.ShowDrinkWaterPanel(DrinkWaterPanelController.PanelMode.Continue);
 			return false;
@@ -30,7 +31,8 @@ namespace DrinkWater.AffinityPatches
 		[AffinityPatch(typeof(ResultsViewController), nameof(ResultsViewController.RestartButtonPressed))]
 		private bool RestartButtonPressedPatch()
 		{
-			if (!_pluginConfig.EnablePlugin || !_drinkWaterPanelController.displayPanelNeeded) return true;
+			if (!_pluginConfig.Enabled || !_drinkWaterPanelController.displayPanelNeeded) 
+				return true;
 
 			_drinkWaterPanelController.ShowDrinkWaterPanel(DrinkWaterPanelController.PanelMode.Restart);
 			return false;

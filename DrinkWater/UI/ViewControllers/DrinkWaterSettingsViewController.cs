@@ -6,36 +6,54 @@ using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Settings;
 using DrinkWater.Configuration;
 using DrinkWater.Utils;
+using HMUI;
 using IPA.Loader;
 using SiraUtil.Logging;
 using SiraUtil.Web.SiraSync;
 using SiraUtil.Zenject;
 using TMPro;
 using Tweening;
+using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace DrinkWater.UI.ViewControllers
 {
-	public class DrinkWaterSettingsViewController : IInitializable, IDisposable, INotifyPropertyChanged
+	internal sealed class DrinkWaterSettingsViewController : IInitializable, IDisposable, INotifyPropertyChanged
 	{
-		private bool _updateAvailable;
+		internal delegate void SetSettingsButtonUnderline(bool active);
 		
+		private bool _updateAvailable;
+
 		[UIComponent("update-text")] 
 		private readonly TextMeshProUGUI _updateText = null!;
+
+		[UIComponent("settings-container")]
+		private readonly Transform _settingsContainerTransform = null!;
 		
+		[UIComponent("playtime-settings-button")]
+		private readonly Button _playtimeSettingsButton = null!;
+		
+		[UIComponent("play-count-settings-button")]
+		private readonly Button _playCountSettingsButton = null!;
+
 		private readonly SiraLog _siraLog;
 		private readonly PluginConfig _pluginConfig;
 		private readonly PluginMetadata _pluginMetadata;
 		private readonly ISiraSyncService _siraSyncService;
 		private readonly TimeTweeningManager _timeTweeningManager;
+		private PlaytimeSettingsModalController _playtimeSettingsModalController;
+		private PlayCountSettingsModalController _playCountSettingsModalController;
 
-		public DrinkWaterSettingsViewController(SiraLog siraLog, PluginConfig pluginConfig, UBinder<Plugin, PluginMetadata> pluginMetadata, ISiraSyncService siraSyncService, TimeTweeningManager timeTweeningManager)
+		public DrinkWaterSettingsViewController(SiraLog siraLog, PluginConfig pluginConfig, UBinder<Plugin, PluginMetadata> pluginMetadata, ISiraSyncService siraSyncService, TimeTweeningManager timeTweeningManager, PlaytimeSettingsModalController playtimeSettingsModalController, PlayCountSettingsModalController playCountSettingsModalController)
 		{
 			_siraLog = siraLog;
 			_pluginConfig = pluginConfig;
 			_pluginMetadata = pluginMetadata.Value;
 			_siraSyncService = siraSyncService;
 			_timeTweeningManager = timeTweeningManager;
+			_playtimeSettingsModalController = playtimeSettingsModalController;
+			_playCountSettingsModalController = playCountSettingsModalController;
 		}
 
 		public event PropertyChangedEventHandler? PropertyChanged;
@@ -54,8 +72,8 @@ namespace DrinkWater.UI.ViewControllers
 		[UIValue("enabled-bool")]
 		private bool EnabledValue
         {
-            get => _pluginConfig.EnablePlugin;
-            set => _pluginConfig.EnablePlugin = value;
+            get => _pluginConfig.Enabled;
+            set => _pluginConfig.Enabled = value;
         }
 
         [UIValue("show-image-bool")]
@@ -81,49 +99,35 @@ namespace DrinkWater.UI.ViewControllers
             set => _pluginConfig.WaitDuration = value;
         }
 
-        [UIValue("enable-playtime-bool")]
-        private bool EnableByPlaytimeValue
-        {
-            get => _pluginConfig.EnableByPlaytime;
-            set => _pluginConfig.EnableByPlaytime = value;
-        }
-
-        [UIValue("enable-playtime-count-bool")]
-        private bool EnableByPlaytimeCount
-        {
-            get => _pluginConfig.EnableByPlaycount;
-            set => _pluginConfig.EnableByPlaycount = value;
-        }
-
-        [UIValue("playtime-warning-int")]
-        private int PlaytimeBeforeWarningValue
-        {
-            get => _pluginConfig.PlaytimeBeforeWarning;
-            set => _pluginConfig.PlaytimeBeforeWarning = value;
-        }
-
-        [UIValue("playcount-warning-int")]
-        private int PlaycountBeforeWarningValue
-        {
-            get => _pluginConfig.PlaycountBeforeWarning;
-            set => _pluginConfig.PlaycountBeforeWarning = value;
-        }
-
         [UIAction("format-wait-duration-slider")]
         private string FormatWaitDurationSlider(int value)
         {
+	        if (value == 0)
+	        {
+		        return "Instant";
+	        }
+
 	        return value + " seconds";
         }
-        
-        [UIAction("format-playtime-slider")]
-        private string FormatPlaytimeSlider(int value)
+
+        [UIAction("playtime-settings-clicked")]
+        private void PlaytimeSettingsClicked()
         {
-	        return value + " minutes";
+	        _playtimeSettingsModalController.ShowModal(_settingsContainerTransform, SetPlaytimeSettingsButtonUnderline);
         }
+        
+        [UIAction("play-count-settings-clicked")]
+        private void PlayCountSettingsClicked()
+		{
+	        _playCountSettingsModalController.ShowModal(_settingsContainerTransform, SetPlayCountSettingsButtonUnderline);
+		}
         
         [UIAction("#post-parse")]
         private async void PostParse()
         {
+	        SetPlayCountSettingsButtonUnderline(_pluginConfig.EnableByPlayCount);
+	        SetPlaytimeSettingsButtonUnderline(_pluginConfig.EnableByPlaytime);
+	        
 	        UpdateAvailable = false;
 	        
 	        if (!_updateAvailable)
@@ -139,20 +143,19 @@ namespace DrinkWater.UI.ViewControllers
 		        }
 	        }
         }
-        
-        [UIAction("#apply")]
-        public void OnApply()
+
+        private void SetPlaytimeSettingsButtonUnderline(bool active)
         {
-            _pluginConfig.EnablePlugin = EnabledValue;
-            _pluginConfig.ShowImages = ShowGifValue;
-            _pluginConfig.ImageSource = (ImageSources.Sources) ImageSource;
-            _pluginConfig.WaitDuration = WaitDurationValue;
-            _pluginConfig.EnableByPlaytime = EnableByPlaytimeValue;
-            _pluginConfig.EnableByPlaycount = EnableByPlaytimeCount;
-            _pluginConfig.PlaytimeBeforeWarning = PlaytimeBeforeWarningValue;
-            _pluginConfig.PlaycountBeforeWarning = PlaycountBeforeWarningValue;
+	        _playtimeSettingsButton.transform.Find("Underline").gameObject.GetComponent<ImageView>().color =
+		        active ? new Color(0f, 0.7529412f, 1f, 1f) : new Color(1f, 1f, 1f, 0.5019608f);
         }
-		
+        
+        private void SetPlayCountSettingsButtonUnderline(bool active)
+        {
+	        _playCountSettingsButton.transform.Find("Underline").gameObject.GetComponent<ImageView>().color =
+		        active ? new Color(0f, 0.7529412f, 1f, 1f) : new Color(1f, 1f, 1f, 0.5019608f);
+        }
+        
 		public void Initialize() => BSMLSettings.instance.AddSettingsMenu("Drink Water", $"{nameof(DrinkWater)}.UI.Views.SettingsView.bsml", this);
 
 		public void Dispose()

@@ -4,7 +4,7 @@ using Zenject;
 
 namespace DrinkWater.UI.FlowCoordinators
 {
-    internal class DrinkWaterFlowCoordinator : FlowCoordinator
+    internal sealed class DrinkWaterFlowCoordinator : FlowCoordinator
     {
         private DrinkWaterPanelController _drinkWaterPanelController = null!;
 

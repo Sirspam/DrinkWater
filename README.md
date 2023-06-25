@@ -1,5 +1,5 @@
 # DrinkWater <img src="DrinkWater\Resources\AquaDrink.png" align="right" width="150">
-Beat Saber mod to remind you of the importance of hydration
+A Beat Saber mod to remind you of the importance of hydration
 ## Usage
 DrinkWater's settings can be accessed from the Mod Settings panel.
 ### Image Sources

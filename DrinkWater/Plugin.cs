@@ -14,11 +14,14 @@ namespace DrinkWater
         [Init]
         public Plugin(Config conf, Logger logger, Zenjector zenjector)
         {
+            zenjector.UseSiraSync();
+            zenjector.UseHttpService();
             zenjector.UseLogger(logger);
             zenjector.UseMetadataBinder<Plugin>();
-            zenjector.UseSiraSync();
-            
+
+            zenjector.Install<DrinkWaterAppInstaller>(Location.App);
             zenjector.Install<DrinkWaterMenuInstaller>(Location.Menu, conf.Generated<PluginConfig>());
+            zenjector.Install<DrinkWaterGameInstaller>(Location.Singleplayer);
         }
     }
 }

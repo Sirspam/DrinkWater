@@ -8,7 +8,7 @@ using Zenject;
 
 namespace DrinkWater.Installers
 {
-	internal class DrinkWaterMenuInstaller : Installer
+	internal sealed class DrinkWaterMenuInstaller : Installer
 	{
 		private readonly PluginConfig _pluginConfig;
 
@@ -26,6 +26,8 @@ namespace DrinkWater.Installers
 			Container.BindInterfacesTo<ResultsViewControllerPatches>().AsSingle();
 
 			Container.BindInterfacesTo<DrinkWaterSettingsViewController>().AsSingle();
+			Container.Bind<PlayCountSettingsModalController>().AsSingle();
+			Container.Bind<PlaytimeSettingsModalController>().AsSingle();
 			Container.Bind<DrinkWaterFlowCoordinator>().FromNewComponentOnNewGameObject().AsSingle();
 			Container.Bind<DrinkWaterPanelController>().FromNewComponentAsViewController().AsSingle();
 		}

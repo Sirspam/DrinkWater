@@ -3,14 +3,14 @@
     <text id="update-text" active="~update-available" color="#FFEE00"/>
   </vertical>
   
-  <settings-container>
-    <bool-setting text='Enabled' value='enabled-bool' hover-hint='Enable or not the plugin'/>
-    <bool-setting text='Show Images' value='show-image-bool' hover-hint='Display or not images on the warning panel'/>
-    <dropdown-list-setting text="Image Sources" value="image-source" choices="image-sources-list" hover-hint="Where the image is sourced from"/>
-    <slider-setting text='Wait duration' value='wait-duration-int' formatter="format-wait-duration-slider" min='0' max='30' increment='1' integer-only='true' show-buttons="true" hover-hint='Waiting time in seconds before skipping the warning panel'/>
-    <bool-setting text='Enable by playtime' value='enable-playtime-bool' hover-hint='Enable the plugin depending of the playtime'/>
-    <bool-setting text='Enable by play count' value='enable-playtime-count-bool' hover-hint='Enable the plugin depending of the play count'/>
-    <slider-setting text='Playtime warning' value='playtime-warning-int' formatter="format-playtime-slider" min='1' max='30' increment='1' integer-only='true' show-buttons="true" hover-hint="How much playtime before being warned in minutes ('Enable by playtime' must be true)"/>
-    <slider-setting text='Play count warning' value='playcount-warning-int' min='0' max='5' increment='1' integer-only='true' show-buttons="true" hover-hint="How much play count before being warned ('Enable by play count' must be true)"/>
+  <settings-container id="settings-container">
+    <bool-setting text="Enabled" value="enabled-bool" bind-value="true" apply-on-change="true" hover-hint="Whether the plugin is enabled"/>
+    <bool-setting text="Show Images" value="show-image-bool" bind-value="true" apply-on-change="true" hover-hint="Whether an image is shown with warnings"/>
+    <dropdown-list-setting text="Image Sources" value="image-source" choices="image-sources-list" bind-value="true" apply-on-change="true" hover-hint="Where the image is sourced from"/>
+    <slider-setting text="Wait duration" value="wait-duration-int" formatter="format-wait-duration-slider" min="0" max="30" increment="1" integer-only="true" show-buttons="true" bind-value="true" apply-on-change="true" hover-hint="Amount of seconds until the warning screen can be dismissed"/>
+    <horizontal>
+      <button id="playtime-settings-button" text="Playtime Settings" on-click="playtime-settings-clicked" pref-width="40" pref-height="8"/>
+      <button id="play-count-settings-button" text="Play Count Settings" on-click="play-count-settings-clicked" pref-width="40" pref-height="8"/>
+    </horizontal>
   </settings-container>
 </bg>

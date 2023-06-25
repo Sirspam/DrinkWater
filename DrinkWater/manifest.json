@@ -3,15 +3,15 @@
   "id": "DrinkWater",
   "name": "DrinkWater",
   "author": "Sirspam",
-  "version": "1.0.1",
-  "description": "Beat Saber mod to remind you of the importance of hydration",
-  "gameVersion": "1.21.0",
+  "version": "1.1.0",
+  "description": "A Beat Saber mod to remind you of the importance of hydration",
+  "gameVersion": "1.30.0",
   "icon": "DrinkWater.Resources.AquaDrink.png",
-    "dependsOn": {
-      "BSIPA": "^4.2.2",
-      "BeatSaberMarkupLanguage": "^1.6.2",
-      "SiraUtil": "^3.0.5"
-    },
+  "dependsOn": {
+    "BSIPA": "^4.3.0",
+    "BeatSaberMarkupLanguage": "^1.7.0",
+    "SiraUtil": "^3.0.5"
+  },
   "links": {
     "project-source": "https://github.com/Sirspam/DrinkWater"
   }
