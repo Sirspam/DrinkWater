@@ -75,7 +75,7 @@ namespace DrinkWater.UI.ViewControllers
 		{
 			if (!_parsed)
 			{
-				BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "DrinkWater.UI.Views.PlayCountSettingsView.bsml"), parentTransform.gameObject, this);
+				BSMLParser.Instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "DrinkWater.UI.Views.PlayCountSettingsView.bsml"), parentTransform.gameObject, this);
 				_setSettingsButtonUnderlineDelegate = setSettingsButtonUnderlineDelegate;
 				_parsed = true;
 			}

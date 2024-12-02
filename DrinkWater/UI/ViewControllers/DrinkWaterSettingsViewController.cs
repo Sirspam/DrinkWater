@@ -156,13 +156,13 @@ namespace DrinkWater.UI.ViewControllers
 		        active ? new Color(0f, 0.7529412f, 1f, 1f) : new Color(1f, 1f, 1f, 0.5019608f);
         }
         
-		public void Initialize() => BSMLSettings.instance.AddSettingsMenu("Drink Water", $"{nameof(DrinkWater)}.UI.Views.SettingsView.bsml", this);
+		public void Initialize() => BSMLSettings.Instance.AddSettingsMenu("Drink Water", $"{nameof(DrinkWater)}.UI.Views.SettingsView.bsml", this);
 
 		public void Dispose()
 		{
-			if (BSMLSettings.instance != null)
+			if (BSMLSettings.Instance != null)
 			{
-				BSMLSettings.instance.RemoveSettingsMenu(this);
+				BSMLSettings.Instance.RemoveSettingsMenu(this);
 			}
 		}
 	}

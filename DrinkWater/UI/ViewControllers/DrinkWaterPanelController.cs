@@ -133,7 +133,8 @@ namespace DrinkWater.UI.ViewControllers
             if (_pluginConfig.ShowImages)
             {
                 SetImageLoading(true);
-                _drinkImage.SetImage(await _imageSources.GetImagePath(_pluginConfig.ImageSource), true, ScaleOptions, () => SetImageLoading(false));
+                await _drinkImage.SetImageAsync(await _imageSources.GetImagePath(_pluginConfig.ImageSource), true, ScaleOptions);
+                SetImageLoading(false);
             }
             else
             {
@@ -145,6 +146,11 @@ namespace DrinkWater.UI.ViewControllers
         [UIAction("continue-clicked")]
         private void ContinueClicked()
         {
+            if (_previousFlowCoordinator is null)
+            {
+                return;
+            }
+            
             _previousFlowCoordinator.DismissFlowCoordinator(_mainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf(), immediately: _panelMode != PanelMode.None);
             _drinkImage.sprite = Utilities.ImageResources.BlankSprite;
             

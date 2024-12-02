@@ -96,7 +96,7 @@ namespace DrinkWater.Managers
 				_playTime = 0f;
 			}
 
-			void TransitionDidFinishEvent(ScenesTransitionSetupDataSO scenesTransitionSetupDataSo, DiContainer diContainer)
+			void TransitionDidFinishEvent(GameScenesManager.SceneTransitionType sceneTransitionType, ScenesTransitionSetupDataSO scenesTransitionSetupDataSo, DiContainer diContainer)
 			{
 				_gameScenesManager.transitionDidFinishEvent -= TransitionDidFinishEvent;
 				
