@@ -50,7 +50,9 @@ namespace DrinkWater.Utils
 				"https://media1.tenor.com/images/013d560bab2b0fc56a2bc43b8262b4ed/tenor.gif",
 				"https://i.giphy.com/zWOnltJgKVlsc.gif", 
 				"https://i.giphy.com/3ohhwF34cGDoFFhRfy.gif",
-				"https://i.giphy.com/eRBa4tzlbNwE8.gif"
+				"https://i.giphy.com/eRBa4tzlbNwE8.gif",
+				"https://media1.tenor.com/m/ERc6M35agEgAAAAd/dog-funny.gif",
+				"https://media1.tenor.com/m/ddxM47i8WXkAAAAd/cat-drinking-cat-drinking-water.gif"
 			};
 			return classicSources[Random.Range(0, classicSources.Length)];
 		}
