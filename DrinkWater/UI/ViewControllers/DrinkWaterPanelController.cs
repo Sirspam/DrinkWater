@@ -115,7 +115,8 @@ namespace DrinkWater.UI.ViewControllers
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
 
-            if ((_pluginConfig.ImageSource == ImageSources.Sources.Nya || _pluginConfig.ImageSource == ImageSources.Sources.CatBoys) && Random.Range(0, 4) == 3)
+            // I apologise for this
+            if (_pluginConfig.ImageSource == ImageSources.Sources.Nya && Random.Range(0, 4) == 3)
             {
                 _headerContent.text = "Dwynk sum watew! 💦";
                 _textContent.text = (_panelMode == PanelMode.Restart ? "Beyfow weestawting this song" : "Beyfow bwowsying sum noow songes") + ", dwynk sum watew! i-i-it ish iympowtant fow yow bodee!! (>ω< )";

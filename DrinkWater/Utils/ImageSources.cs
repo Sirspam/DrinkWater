@@ -23,7 +23,6 @@ namespace DrinkWater.Utils
 		{
 			Classic,
 			Nya,
-			CatBoys,
 			Local
 		}
 
@@ -39,7 +38,6 @@ namespace DrinkWater.Utils
 			{
 				Sources.Classic => GetClassicImageUrl(),
 				Sources.Nya => await Task.Run(() => GetApiImageUrl("https://api.waifu.pics/sfw/neko")),
-				Sources.CatBoys => await Task.Run(() => GetApiImageUrl("https://api.catboys.com/img")),
 				Sources.Local => GetLocalImagePath(),
 				_ => GetClassicImageUrl()
 			};
