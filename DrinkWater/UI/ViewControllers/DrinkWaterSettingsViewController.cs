@@ -102,12 +102,12 @@ namespace DrinkWater.UI.ViewControllers
         [UIAction("format-wait-duration-slider")]
         private string FormatWaitDurationSlider(int value)
         {
-	        if (value == 0)
+	        return value switch
 	        {
-		        return "Instant";
-	        }
-
-	        return value + " seconds";
+		        0 => "Instant",
+		        1 => "1 second",
+		        _ => value + " seconds"
+	        };
         }
 
         [UIAction("playtime-settings-clicked")]
